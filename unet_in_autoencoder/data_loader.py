@@ -6,6 +6,8 @@ from const import *
 import random
 from glob import glob
 import os
+import matplotlib.pyplot as plt
+
 
 
 def read_data(path):
@@ -57,4 +59,37 @@ class DataGenerator(tf.keras.utils.Sequence):
     def __len__(self):
 
         return self.n // self.batch_size
+
+
+
+
+
+def show_images_with_masks(image_dir, mask_dir):
+    #image_files = sorted(os.listdir(image_dir))
+    #mask_files = sorted(os.listdir(mask_dir))
+
+    # Ensure equal number of images and masks
+    num_files = min(len(image_dir), len(image_dir))
+
+    # Display 5 images and masks
+    num_display = min(num_files, 5)
+    fig, axs = plt.subplots(num_display, 2, figsize=(10, 10))
+
+    for i in range(num_display):
+
+        image = cv2.imread(image_dir[i])
+        mask = cv2.imread(mask_dir[i])[:,:,2]
+
+        # Display image
+        axs[i, 0].imshow(image)
+        axs[i, 0].axis('off')
+        axs[i, 0].set_title('Image')
+
+        # Display mask
+        axs[i, 1].imshow(mask)
+        axs[i, 1].axis('off')
+        axs[i, 1].set_title('Mask')
+
+    plt.tight_layout()
+    plt.show()
 
