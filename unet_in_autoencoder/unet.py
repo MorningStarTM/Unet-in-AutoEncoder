@@ -19,7 +19,11 @@ def encoder_block(input, num_filters):
     return x, p
 
 
-
+def decoder_block(input, skip_features, num_filters):
+    x = L.Conv2DTranspose(num_filters, (2,2), strides=2, padding='same')(input)
+    x = L.Concatenate()([x, skip_features])
+    x = conv_block(x, num_filters)
+    return x
 
 
 
