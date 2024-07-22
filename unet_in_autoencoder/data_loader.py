@@ -4,6 +4,14 @@ import numpy as np
 import tensorflow as tf
 from const import *
 import random
+from glob import glob
+import os
+
+
+def read_data(path):
+    images = sorted(glob(os.path.join(path, "*", "*", "*")))
+    
+    return images, images
 
 class DataGenerator(tf.keras.utils.Sequence):
     def __init__(self, img_filenames,
