@@ -13,6 +13,15 @@ def conv_block(input, num_filters):
     return x
 
 
+def mlp_block(input, num_units):
+    x = L.Flatten()(input)
+    x = L.Dense(num_units, activation='relu')(x)
+    x = L.Dense(num_units, activation='relu')(x)
+    x = L.Dense(num_units, activation='relu')(x)
+    x = L.Reshape((input.shape[1], input.shape[2], num_units))(x)
+    return x
+
+
 def encoder_block(input, num_filters):
     x = conv_block(input, num_filters)
     p = L.MaxPool2D((2,2))(x)
