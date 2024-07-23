@@ -2,12 +2,16 @@ import cv2
 from sklearn.utils import shuffle
 import numpy as np
 import tensorflow as tf
-from .const import *
 import random
 from glob import glob
 import os
 import matplotlib.pyplot as plt
 
+WIDTH, HEIGHT = 256, 256
+BATCH_SIZE = 16
+lr = 1e-04
+epochs = 100
+image_size = [256,256]
 
 
 def read_data(path):
