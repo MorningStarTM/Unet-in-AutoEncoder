@@ -13,12 +13,11 @@ def conv_block(input, num_filters):
     return x
 
 
-def mlp_block(input, num_units):
-    x = L.Flatten()(input)
-    x = L.Dense(num_units, activation='relu')(x)
-    x = L.Dense(num_units, activation='relu')(x)
-    x = L.Dense(num_units, activation='relu')(x)
-    x = L.Reshape((input.shape[1], input.shape[2], num_units))(x)
+def mlp_block(inputs):
+    x = L.Dense(512, activation='relu')(inputs)
+    x = L.Dense(512, activation='relu')(x)
+    x = L.Dense(512, activation='relu')(x)
+    x = L.Dense(256, activation='relu')(x)
     return x
 
 
@@ -45,6 +44,28 @@ def build_unet(input_shape):
     s4, p4 = encoder_block(p3, 256)
 
     b1 = conv_block(p4, 512)
+
+
+    d1 = decoder_block(b1, s4, 256)
+    d2 = decoder_block(d1, s3, 128)
+    d3 = decoder_block(d2, s2, 64)
+    d4 = decoder_block(d3, s1, 32)
+
+    outputs = L.Conv2D(3, (1,1), padding='same', activation='sigmoid')(d4)
+
+    model = Model(inputs, outputs, name='U-Net')
+    return model
+
+
+def mlp_unet(input_shape):
+    inputs = L.Input(input_shape)
+
+    s1, p1 = encoder_block(inputs, 32)
+    s2, p2 = encoder_block(p1, 64)
+    s3, p3 = encoder_block(p2, 128)
+    s4, p4 = encoder_block(p3, 256)
+
+    b1 = mlp_block(p4)
 
 
     d1 = decoder_block(b1, s4, 256)
