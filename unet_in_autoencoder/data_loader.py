@@ -46,6 +46,7 @@ class DataGenerator(tf.keras.utils.Sequence):
             
             mask = cv2.imread(mask_file)
             mask = cv2.resize(mask, (WIDTH, HEIGHT))#[:, :, 2]
+            mask = mask / 255.
 
             imgs.append(image)
             segs.append(mask)
@@ -82,7 +83,8 @@ def show_images_with_masks(image_dir, mask_dir):
     for i in range(num_display):
 
         image = cv2.imread(image_dir[i])
-        mask = cv2.imread(mask_dir[i])[:,:,2]
+        mask = cv2.imread(mask_dir[i])#[:,:,2]
+        
 
         # Display image
         axs[i, 0].imshow(image)
